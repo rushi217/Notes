@@ -1,0 +1,37 @@
+1. Kernel resides in lower part of the RAM.
+
+2. Virtual Address space can be divided into two parts.
+	User Space, Kernel Space
+	
+3. Kernel space can access user space but not vice versa.
+
+4. Kernel is mapped contiguously to be able to map virtual address to physical address easily.
+	physical address = virtual address - MAX_SIZE
+	virtual address = physical address + MAX_SIZE
+	MAX_SIZE = MAX virtual address that a user process can access.
+	
+5. Every process page table has identical kernel mapping. KErnel is present in every processes' virtual address space.
+
+6. Kernel keeps info about each process:
+	PRocess Control Block(PCB).
+	Kernel stack.
+	Page Table.
+	
+7. KErnel stack is used during system calls. Also to store context of process.
+
+8. Two different stacks to avoid kernel deadlock due process overflow.
+
+9. PCB contains:
+	PID
+	Size of process memory.
+	page directory pointer.
+	KErnel stack pointer.
+	Files opened.
+	Current working directory.
+	Name.
+	Pointer to trap frame and context(PArt of Kernel stack).
+
+10. VSZ - Virtual Storage Size; Total memory that a process can access
+
+11. RSS - Real Storage Size; Amount of memory the process is allocated in the RAM.
+

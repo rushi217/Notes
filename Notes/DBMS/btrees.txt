@@ -1,0 +1,8 @@
+block pointers and record pointers
+
+btrees:-
+	root has 2 to p children
+	internal node have p/2 to p children
+	nodes have atmost p-1 children
+	all leaves at same height
+	

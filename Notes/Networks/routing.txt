@@ -1,0 +1,28 @@
+Distance Vector Routing:-
+	Distance - cost (hops) of sending packet from a node to other node
+	Networks can be represented as undirected graphs
+	Vector - vector of distances from a node to other nodes (initially nodes that are not connected directly have distance infinity)
+	After initial populting of dv's, nodes exchange dv's with neighbors
+	Nodes create new routing tables from exchanged tables
+	
+Count to infinity problem:-
+	If a link is down, the immediate node will know about it
+	But the next neighbour will say that it has a finite distance to the down node
+	This is because the dvr has no record to the nodes that you need to pass through to get to the down node
+	"Good news travels fast bad news travles slow"
+	It creates packet loops
+	
+Split Horizon:-
+	If a node depends on another node to reach somewhere, we should not help that node
+	B wants to know about A from me, but i send to A from B so i do not help B
+	I send infinity to B so that that B does not depend on me
+	This helps Count to infinity to converge faster
+
+Link State Routing:-
+	Link State is transfered instead of Distance vector
+	Link state is similar to dv
+	Using Link state a node creates the entire network
+	This is global information
+	Sequence number to keep track of latest packet
+	TTL to avoid a packet falling in loop
+	Distance to neighbors

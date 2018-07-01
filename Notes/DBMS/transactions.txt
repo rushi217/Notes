@@ -1,0 +1,32 @@
+A - Atomicity
+C - Consistency
+I - Isolation
+D - Durability
+
+Transaction states:-
+	Active - executing instructions
+	Partially commited - execution completed
+	Commited - Database updated
+	Failed - Failure occured while executing or updating database
+	Aborted - Revert buffer to previous state using rollback
+	
+Dirty read:-
+	Instead of reading from db, a transaction reads from local buffer
+	This might lead to different values
+	So commit after the transaction you copied from has already commited
+	
+Unrepeatable read:-
+	Multiple reads give different values due to other transactions changing the values
+	
+Phantom read:-
+	Other transaction deleted the value from buffer that i read previously
+	
+Lost Update Problem:-
+	blind write is committed before other transaction
+	other transaction commits the blind write output to the db as blind write changes the buffer
+	
+Schedule:-
+	bundle of transactions
+	Serial Schedule :- No concurrency
+	Non serial :- Concurrency using preemption of operations
+	

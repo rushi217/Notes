@@ -1,0 +1,9 @@
+Optimal Substructure:
+	Given big problem, we should be able to divide into small problems which can be added to obtain the solution for the big
+	
+Overlapping subproblems:
+	subproblems should be repeated
+	
+If no overlapping then problem becomes divide and conquer
+
+

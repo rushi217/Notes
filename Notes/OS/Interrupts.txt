@@ -1,0 +1,47 @@
+1. Interrupts can be of 3 types:
+	Hardware intrs raised by the devices
+	Software intrs raised by user programs
+	Exceptions
+	
+2. In modern systems we have APIC(Advanced Programmable Interrupt controller)
+
+3. Each CPU has a local APIC, and the Northbridge has an I/O APIC
+		Northbridge is connected CPU FSB, Memory bus, PCIE devices
+
+4. I/O APIC is connected to LAPIC using 3-wire APIC bus.
+
+5. Interrupts can be prioritised b/w CPUs
+
+6. APIC bus can also be used to send IPI(Inter Processor Interrupt)
+
+7. Each device has its own interrupt handler routine.
+
+8. Each device has an IRQ number. Processor has pointer to IDTR(Interrupt Descriptor Register Table).
+
+9. IRQ number offsets into IDTR table to give address of the corresponding Interrupt routine.
+
+10. Interrupt Descriptor has Segment Selector and Offset.
+
+11. Segment Selector contains Base and access rights; Base + offet gives address of the routine.
+
+12. When Interrupt occurs:
+	CPU identifies the interrupt routine using IRQ
+	Using IRQ address to routine is obtained.
+	Save state of program(trapframe) on kernel stack so that execution may resume.
+	Top half handler does critical work and returns
+	
+13. Software Interrupt are executed during system call
+
+14. Kernel invokes handler to handle the system call
+
+15. Parameters are passed to kernel by loading them onto the:
+	User Stack(xv6)
+	Registers(linux)
+	
+16. In User Stack:
+	Params are loaded onto user stack
+	This stack is pointed to by the User Stack pointer in trapframe.
+	During Privilegded mode content of registers is loaded onto trapframe in the kernel stack
+	This is because it is dangerous to operate on the user stack.
+
+17. During return, the return value is stored onto the eax.

@@ -1,0 +1,24 @@
+MUTEX
+pthread_mutex_t is the variable type of mutex
+Initially it contains garbage value
+pthread_mutex_init initializes mutex to 0
+pthread_mutex_lock and pthread_mutex_unlock for locking mechanism
+
+SEMAPHORE
+declared as sem_t variable
+
+##Unnamed Semaphore (for thread of the same process)
+stored in global variables
+sem_init() used to initialise the semaphore
+initially it is garbage
+init makes it zero
+sem_init takes as argument sem_t, pshared indicating whether sema is shared bw processes or threads(0) and semaphore initial value
+sem_wait, sem_post to down/up semaphore value
+sem_destroy to destroy the semaphore
+
+##Named Semaphore (for different processes)
+stored in shared memory
+sem_open takes sema name, create/exclusive flag, 0777 mode, value and return sem_t *
+sem_wait/sem_post just as above
+sem_unlink to remove the name of semaphore
+sem_close to close the semaphore (allocated resources are freed)

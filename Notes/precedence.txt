@@ -1,0 +1,17 @@
+1. box operator [], member (->)
+
+2. dereference (*), address of (&), logical not, memory allocation/deallocation
+
+3. mult, div, mod
+
+4. add, sub
+
+5. comparison (<, >, <=, >=)
+
+6. ==, !=
+
+7. bitwise operators (in order :- &, ^, |)
+
+8. logical operators (in order:- &&, ||)
+
+9. compound assignment (+=, -=)

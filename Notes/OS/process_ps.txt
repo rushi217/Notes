@@ -1,0 +1,44 @@
+ps -xal
+
+UID = User name/id of the process owner
+F = flags
+PID
+PPID
+PRI = Priority
+NI = Nice value
+VSZ = Virtual memory usage (Total memory of the process including swap, allocated but not used memory)
+RSS = Resident Set Size (portion of process memory held in main memory)
+TIME = Amount of CPU time used by the process
+COMMAND = Name of the process alongwith the arguments
+STAT = Process State (Comprises of state codes and attributes)
+	State Codes:-
+		D - Uninterruptible Sleep, executing uninterruptible system calls (eg:- mkdir)
+			cannot kill a process in this state
+		R - Running or Runnable
+		S - Interruptible Sleep (I/O), (waiting for event)
+		T - Stopped by job control signal or being traced
+			job - It is a process group (eg:- grep apt | sort | less)
+			job control - allows user to move between processes in a single session(terminal)
+			Traced state is when process is stopped using SIGSTOP
+		Z - Zombie (defunct) terminated but not reaped
+		
+	keywords:-
+		< - high priority
+		N - low priority
+		s - session leader (we use group id and session id so that it becomes easy to identify related processes)
+				It makes it easy to kill all piped processes when exiting terminal
+		l - is multithreaded
+		+ - is in the foreground process group
+		
+WCHAN = Memory address of the kernel function the process is sleeping in (Waiting Channel)	
+		
+Notes:-
+	Ctrl^z sends SIGSTOP, fg/bg send SIGCONT
+	tty is a terminal device
+	pts is a pseudo terminal device (terminal device emulated by a xterm or shell or ssh)
+	If we want to see implementations of c libraries we need source code as linux contains precompiled libraries (shared object)
+	
+	ptrace:- allows tracer to observe and control the execution of tracee
+		While being traced, tracee will stop each time a signal is recieved
+		
+	Sometimes process arguments are unavailable(kernel daemons), then ps prints these processes in square brackets

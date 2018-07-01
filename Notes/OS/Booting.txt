@@ -1,0 +1,38 @@
+1. Power On is pressed.
+
+2. Every register initialized to 0 except Code Segment(CS) and Instruction Pointer(IP).
+
+3. CS = 0xf000 IP = 0xfff0
+
+4. Bios Address = (CS)<<<4 + IP = 0xffff0 At this address bios ROM is connected in processor address space
+
+5. Bios then:
+	test the system.
+	initialize pci and pcie (Peripheral Component Interconnect Express) devices and puts them in cpu address space.
+	Identifies the boot device (OS)
+	Read sector 0 from boot device and load in 0x7c00 location in RAM.
+	
+6. SEctor 0 is called the Master Boot Record.
+
+7. MBR loads the bootloader (small program) after looking at the partition table.
+
+8. Bootloader loads the OS.
+
+9. Bootloader also:
+	Allows user to select which OS to load.
+	Setup GDT(Global Descriptor Table).
+	Read OS into the RAM.
+	
+10. During Booting CPU operates in Real Mode.
+
+11. In real mode:
+	Only 20 bit(1MB) addressable space is available.
+	Bios, MBR, peripherals are put in this address space.
+	
+12. Just before loading OS, CPU shifts to protected mode.
+
+13. Sometimes MBR may be absent, Bootloader is present in Sector 0.
+
+14. In multiprocessor system one of the processor is designated as boot processor.
+
+15. Boot processsor then starts other processors(Application Processors) using Startup Inter Processor Interrupt.

@@ -1,0 +1,67 @@
+--select employee with highest salary
+1. select * from Employee
+	order by salary desc
+	limit 1
+	
+	select * from Employee
+	where salary = (select max(salary) from employee)
+
+--select highest salary
+2. select max(salary) from employee
+
+--second highest salary
+3. select max(salary) from employee
+	where salary not in (select max(salary) from employee)
+	
+--select between a range
+4. select * from employee
+	where Id between 2003 and 2008
+	
+--department_name of employee with max salary
+5. select * from Employee as e
+	inner join department as d on e.departmentId = d.Id
+	where salary = (select max(salary) from employee)
+	
+--max salary for each department
+6. select * from Employee as e
+	inner join department as d on e.departmentId = d.Id
+	where salary in (select Max(salary) from employee group by departmentId) --group by particular table vvimp
+	
+--select second highest salary
+7. select Max(salary) from employee
+	where salary < (select max(salary) from employee)
+	
+--select nth highest salary
+8. select top 1 salary from (select distinct top N salary --N is the nth salary
+	from employee
+	order by salary desc)
+	as result
+	order by salary
+	
+--common table expression(CTE)
+9. with result as (select salary, DENSE_RANK() over (order by salary desc) as dr --Dense rank gives same rank to same values
+	from employee)
+	select top 1 salary
+	from result
+	where result.dr = 3 --3 for 3rd highest
+	
+--find employees hired in last n months
+10. select * from employee 
+	where DATEDIFF(MONTH, hiredate, GETDATE()) between 1 and 3 --args:- difference metric, startdate, enddate [can be DAY/YEAR]
+	order by hiredate desc
+	
+--select department name with highest number of employees
+11. select top 1 department_name from employees as e
+	inner join department as d on d.Id = e.depId
+	group by departname_name
+	order by count(*) desc
+	
+--Delete duplicates but keep one copy
+12. with ecte as(
+	select *, row_number() over (Partition by ID order by ID) as rnum --Each ID is considered as partition and for each partition rnum starts from 1
+	from employee
+	)
+	delete from employee where rnum > 1
+	
+--We can join tables without foreign primary key relationship
+--foreign key is important to maintain referential integrity (disallow bad data)

@@ -1,0 +1,74 @@
+Three File tables
+
+One per process file descriptor table
+	Contains file descriptor pointers indexed using fd numbers
+	fd pointers point to entry in Open file table
+	
+System wide Open File Table
+	Each entry contains
+		reference count = number of processes (children) referring to the file
+			Each process opening the file creates separate entry 
+		inode table index
+
+System wide Inode table in the superblock
+	File name mapped to inode number and starting logical address
+	Maps byte offsets to logical block numbers
+	for eg:- 11033rd byte in the file assuming block size is 4096 bytes
+		11033/4096 = 2 so second block (block number obtained using inode struct of file)
+
+
+Disk space is allocated in blocks which might lead to internal fragmentation (some space of last block goes to waste)
+
+Use indexing (dense or sparse) to keep track of file blocks
+
+Inode:-
+	Inode is the entire structure
+	Directories are files that contain filename string and inode number pairs
+	Superblock of the system contains starting logical address (block number) of the file mapped to an inode number
+	Inode number of '.' is the inode number of the directory
+	Inode number of '..' is the inode number of the parent directory
+	That is why 'cd .' returns you to same folder
+	When we delete file we set its inode number to zero so we cannot access a file but it is still there
+	When we perform deletion and creation of files repeatedly, inode numbers are not allocated contiguously
+	This is why search time increases and system performance deteriorates gradually
+	This is why we use temp folder (/tmp) which can be repaired
+	All inodes are collected in inode table
+	Fields:-
+		struct dinode
+		{ ushort  di_mode;     /* mode (permissions) and type of file  (eg:- directory, socket, named pipe) */
+		  short   di_nlink;    /* number of links to file */
+		  ushort  di_uid;      /* owner's user id         */
+		  ushort  di_gid;      /* owner's group id        */
+		  off_t   di_size;     /* number of bytes in file (file size) */
+		  char    di_addr[39]; /* disk block addresses    */
+		  char    di_gen;      /* file generation number  */
+		  time_t  di_atime;    /* time last accessed      */
+		  time_t  di_mtime;    /* time last modified      */
+		  time_t  di_ctime;    /* time created            */
+		};
+		
+		Here Block addresses are actually block numbers
+		40 address bytes:-
+			13 addresses of 3 bytes each and last byte is file generation number
+			File generation number is used to generate inode numbers
+			Assume blok size is 1kb
+			For a file of 10kb, first 10 addresses store address of each block
+			For file greater than 10 kb:
+				A single indirect disk block (of size 1kb) is used record more block addresses (256 * 4 bytes)
+				11th block address is used to store the address of single indirect block (single indirect address)
+				Total file size possible is 266kb
+			For file that is even bigger
+				use 12th address
+				double indirect block address
+				We store address to 256 single indirect blocks
+				File size becomes 64mb
+			Even further
+				use 13th address
+				triple indirect block address
+				File size is 16gb
+
+System Calls :-
+	open(path, mode) is used to add file to open files table using file descriptor as an index
+		mode is matched against permission
+	close(fd) closes a file by freeing the file descriptor
+	

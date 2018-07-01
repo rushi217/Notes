@@ -1,0 +1,40 @@
+Assignment operator is overloaded in classes when we assign a class object to other class object
+Student s1 = s2 (Here student is a class)
+Above line calls copy constructor which copies (deep) all variables of one object to other object
+Copy constructor is only called when constructing object using assignment
+Student s1;
+s1 = s2;	//This does not call copy constructor
+Copy is shallow if we declare object using new
+
+If constructor is declared private it cannot be called from outside the class
+This gives compiler error
+Default Access specifier is Private
+
+If we write any constructor (copy or normal) then the compiler does not create default constructor
+Setting default values like in python is also allowed in C++
+
+Once a reference is created, it cannot be later made to reference another object; it cannot be reset.
+Returning pointers, or addresses of local variables may cause segmentation fault
+
+Size of an empty class object is not 0 so that different object dont get same address
+
+Static methods in a class do not need object
+They can be called using classname::methodname
+They can access only static members (static variables, other static methods) of the class
+Virtual functions can't be static
+
+Destructor can be private as long we dont call it
+eg:- when we use new we need to delete object explicitly to call destructor
+Destruction is always in opposite order of construction
+
+Global variables can be accessed inside class
+If an object is declared inside function then its destructor is called after returning
+
+The ‘this’ pointer is passed as a hidden argument to all non-static member function calls and is available as a local variable within the body of all non-static functions.
+'this' is not passed to static functions
+‘this’ pointer is a constant pointer that holds the memory address of the current object.
+
+*******************
+In downcasting, base pointer cannot access derived class variables
+If derived class overides function, then all the methods with same name become hidden
+No virtual constructor, but we can have virtual destructor 

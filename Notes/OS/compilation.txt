@@ -1,0 +1,44 @@
+compilation has 4 stages:-
+	preprocessing - Expand included files and macros
+	compiling - convert to assembly language (syntactic errors are detected here)
+	assembly - assemblt to machine language
+	linking - combine object files to produce excetuble (linking of libraries)
+	
+a.out - default file name for gcc output
+.so - shared object file (Shared libraries)
+.o - user libraries
+
+Relocation:-
+	Address of code lines may not remain same after loading
+	So Goto cannot find its location during compile time
+	So Exact addresses cannot be used directly
+	We use relocatable address
+	The address that the line finally gets after loading is called absolute address
+	We need relocation info to convert relocatable address to absolute address
+	
+Symbol Table:-
+	Specifies Variables, Functions defined in the program and also ones that cannot be resolved (eg:- printf)
+	Linker resolves these functions before loading
+	call printf :- calling object code of printf
+	Standard Library (libc.so) contains all the compiled library funtions
+	Linker has access to standard library by default
+	
+Static Linking:-
+	Give Symbol references (address) at places of calls
+	Assume programs load from memory 0
+	static address to all functions
+	Calling printf requires you to place printf object code in each program
+	
+Dynamic Linking:-
+	Here instead of writing printf code in each program
+	Instead leave it unresolved and place a stub
+	Stub asks OS to replace itself with code already available in kernel or user memory or in the shared library
+	Since library is shared no point in loading printf in all programs
+	Stub placed only once for each call
+	
+Loader:-
+	OS gives starting address to the loader
+	loader translates all relocatable address to absolute address
+	If program is swapped during runtime then we need to loader again to obtain addresses
+	At runtime:-
+		DLL (Dynamic linked libraries) are connected

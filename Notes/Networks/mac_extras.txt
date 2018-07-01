@@ -1,0 +1,48 @@
+CRC (cyclic redundancy check)
+	sender and reciever exchange the CRC generator beforehand
+	let gen size be n
+	n-1 zeros are appended to the frame
+	remainder is calculated and added to the frame after dividing with generator
+	while checking at the reciever the remainder must be zero if the there is no error
+	It is an error detection strat (retransmission after detection)
+
+Checksum
+	Assume 8 bit checksum (IP uses 16 bit)
+	Header is divided into 8 bit sections
+	Decimal equivalent of each 8 bit section is calculated and summed
+	1's complement of the sum is calculated and stored in the checksum field
+	While calculating the checksum is kept zero
+	
+Data is measured in powers of 2
+BW is measured in powers of 10
+
+Transmission delay is the time taken by the host to put the packet on the link
+	Tt = packet_size / BW
+Propagation delay is the time taken by the packet to traverse the link
+	Tp = D/V (D = distance, V = speed)
+Processing time and Queueing time at the reciever
+
+Throughput (Bandwidth Utilization) = Total bits that can be sent per second
+								   = L / Tt + 2*Tp , L = total number of bits sent
+Efficiency (eta) = 1 / (1 + (2*Tp)/Tt) (Numerator is 1 for stop and wait)
+Throughput = eta * BW
+Capacity of the channel = BW * Tp (Total data that can be stored in the channel)
+Maax number of packets that can be sent = 1 + 2 * (Tp/Tt)
+
+Go Back N:-
+	1. Sender window size is equal to N (N > 1, if N = 1 then it is stop and wait)
+		eta = N / 1 + 2*a
+	2. Reciever window size is 1
+		It is called Go Back N because in case error sender goes back by N packets from the recently transmitted packet and transmits again
+		This is because reciever discards packets not in order
+		All the packets in the window are retransmitted
+	3. It uses cumulative acknowledgements
+		each packet has timeout timers
+		Reciever has a ACK timer
+		In each interval it ACKs all the packets recieved
+	Sequence Numbers > sender window size + reciever window size
+	
+Selective Repeat:-
+	1. Sender Window size > 1
+	2. Reciever Window size = sender window size
+	3. Send Negative ACK for corrupted packets

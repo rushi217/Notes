@@ -1,0 +1,35 @@
+1. Process has access only to its virtual address map.
+
+2. So process cannot access other processes' virtual addr map.
+
+3. 3 ways:
+	Shared Memory - 
+		Create shared area in RAM as part of user space
+		Communication is fast 
+		no syscalls involved
+		highly prone to error if processes are unsynchronized
+		int shmget(key, size, flags):
+			create shared memory segment
+			return shmid
+			key = unique id
+			size = size of shm(rounded up to page size)
+		int shmat(shmid, addr, flags):
+			Attach shmid shared memory to address space of the calling process
+			addr = pointer to shared memory address space
+		int shmdt(shmid):
+			detach shared memory
+	
+	Message Passing - 
+		Create shared memory as part of the kernel space
+		Communication using send and recieve system calls
+		It is slow due to syscall overhead
+		
+	Pipe - 
+		used b/w parent child
+		fd[0] to read(read from stdin) and fd[1] is used to write
+		dup system call to duplicate pipe into stdin/out
+		2 pipes for 2-way communication
+		
+	Signals -
+		They are integers with predefined meaning used wiht kill command
+		Process must define signal handler for diff types of signals to use the signal

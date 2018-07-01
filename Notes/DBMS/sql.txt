@@ -1,0 +1,48 @@
+create database Customer
+
+create table Customer
+(
+FirstName varchar(50),
+LastName varchar(20),
+Age int
+)
+
+insert into Customer (FirstName, LastName, Age) values ('Joey','Dumbre', '23')
+
+select * from Customer
+select FirstName from Customer
+select FirstName,Age from Customer where FirstName = 'Mike'
+select FirstName,LAstName from Customer where FirstName = 'Mike' and LastName like 'schimdt%' --LAstName that starts with schimdt
+like 'schmidt_' --schimdt and something extra (only schmidt is not valid)
+
+update Customer set Age = 20 where FirstName = 'Joey'
+
+delete Customer where FirstName = 'Mike' and lastNAme like 'schmidt_'
+
+alter table Customer add City varchar(20)
+
+drop Customer
+
+create table Customer
+(
+Id int auto_increment,
+FirstName varchar(50),
+LastName varchar(20),
+Age int,
+City varchar(20)
+primary key(Id)
+)
+
+Alter table Orders
+add foreign key (CustomerId) references Customer(Id) --  not let us insert bad data
+
+select * from Orders as o -- we can select specific columns from o,p,c here
+inner join Products as p on o.ProductId = p.Id 
+inner join Customers as c on o.CustomerID = c.Id
+
+select sum(p.products) as Total from Products as p
+
+select c.LastName, sum(p.products) as Total from Orders as o
+inner join Products as p on o.ProductId = p.Id 
+inner join Customers as c on o.CustomerID = c.Id
+group by c.LastName --sum prices over customers

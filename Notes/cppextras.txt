@@ -1,0 +1,58 @@
+Preprocessor Directives
+	Can-
+		replace tokens in the text
+		insert content into the file
+	Begin with #
+	Macro gives readability in code
+	#define:-
+		replaced directly before calculating
+		#define SQR(X) X*X
+		#define DEMO(X) X+X
+		
+	#ifdef:-
+		Conditional compilation
+		#ifdef DEMO (if DEMO is defined then do the enclosed cpp code)
+			c code
+		#endif		(if DEMO is not defined the code is not compiled)
+		#if
+		#else    
+		#elif	(also available, alongwith comparison operators to check macros)
+	
+	#error:-
+		Prints msg and halts compilation
+		
+Union
+	Works like a structure but all elements share the memory
+	Memory sharing begins at lowest address (i.e char takes lowest byte of an integer)
+	Size of a union is the size of the largest element in the union
+
+Extern
+	Usually we create many object files and compile them into single executable
+	Extern keyword helps compiler understand that the variable (or a funtion) is defined in some other object file
+	Extern keyword is by default prepended to the funtion declarations
+	When we use extern with variables, compiler looks for definition of variable in all linked files
+	If it does not find the variable an error is thrown
+	Extern declares variables with no memory allocation (no definition)
+	
+Static
+	When used with global variables/functions - visible within its own translation unit (its own object file)
+		Other linked object files are unable to access it (hidden)
+	When used with local variables - persistence over multiple function calls
+		visible only within that function (global variable like entity for function)
+	
+Inline function
+	inline void sum(int a, int b){
+		cout<<a+b<<endl;
+	}
+	In normal functions program counter moves to the function location after the storing the return location on stack
+	This jumping is too much overhead for small functions
+	Inline function is copied to the calling location by the compiler thus avoiding the overhead
+	Inline function should be used if memory is not a concern
+	
+Others
+	Uninitialized global variables are initialized to zero
+	char value ranges from -128 to 127
+	printf returns number of bytes printed
+	scanf returns number of values scanned
+	Number of tokens in a code is the number of symbols used eg:-(keywords, operators, variables)
+	-ve int is stored as 2's complement

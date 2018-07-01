@@ -1,0 +1,17 @@
+Notation:
+	1. Big Oh (O) = upper bound (worst case)
+					f(n) <= c*g(n), for n >= n0, c > 0, n0 >= 1
+	
+	2. Big Omega (Om) = lower bound
+						f(n) >= c*g(n), for n >= n0, c > 0, n0 >= 1
+						
+	3. Big Theta (Ot) = upper and lower bound
+						c1*g(n) <= f(n) <= c2*g(n), for n >= n0, c1,c2 > 0, n0 >= 1
+	
+	Relationship between stopping condition and number of iterations necessary to reach the condition gives worst case
+	
+	No need to unroll if each loop executes independently
+	
+	If loops depend on each other, the we have have to unroll (create a summation equation)
+	
+	

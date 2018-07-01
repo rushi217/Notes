@@ -1,0 +1,88 @@
+1. Exclusive access to critical section is necessary for sync
+
+2. Requirements for sync:
+	a. Mutual Exclusion :- Only one process can access crit at a time
+	b. Progress	:- One process should not stop other processes from entering crit when former process does not want to crit
+	c. Bounding Wait(No Starvation) :- Process should be able to access crit in finite time (secondary requirement)
+	d. Architectural Neutrality
+	
+Mechanisms can be with
+	a. Busy Waiting :- falling in infinite loop wasting CPU cycles
+	b. No Busy Waiting :- Sleep or Queue
+
+3. Methods:
+	a. disabling interrupts before crit section and enabling later
+	   timer interrupts are masked
+	   so context switching does not occur while a process is operating n crit section
+
+	b. While loops
+
+	c. Bakery Algorithm
+	   lock(i){
+		choosing[i] = true;
+	   	num[i] = max[num[0],...,num[n-1]] + 1;
+		choosing[i] = false;
+		for(p = 0; p < n; p++){
+			while(choosing[p]);
+			while(num[p] != 0 && (num[p], p) < (num[i], i));	//if two processes get same ticket
+		}
+	   }
+
+	   //Critical Section
+
+	   unlock(i){
+		num[i] = 0;
+	   }
+
+	   d. Spinlock(busy waiting)
+
+	   e. Mutex:
+		int xchg(lock, val){
+			%eax = val;
+			xchg %eax lock
+		}
+
+		void lock(int *lock){
+			while(1){
+				if(xchg(&lock, 1) == 0)
+					break;
+				else
+					enqueue(P); //Enqueue process to solve thundering herd
+					sleep();
+			}
+		}
+		
+		void unlock(int *lock){
+			*lock = 0;
+			dequeue(P);	//wake up only P
+			wakeup(P);
+		}
+
+		f. Semaphores:(2 atomic functions)
+			Store wakeup signals so that process does not need to sleep if some other process has already sent a wakeup
+			These operations need to be atomic
+			Counting semaphore if you want multiple processes to be able to access crit at same time
+			A released semaphore can be released again (no blocking on release)
+
+			void up(int *S){
+				*S++;
+			}
+
+			void down(int *S){
+				while(*S <= 0);	//queue is also used, without queue starvation may occur
+				*S--;
+			}
+
+4. Producer Consumer:
+	2 Semaphores full, empty
+	1 mutex 'mutex'
+	mutex used for mutual exclusion of the buffer
+	semaphores for keeping track of buffer size
+	initially full = 0, empty = N(size of bounded buffer)
+	semaphore and mutex used in combo
+	producer:						consumer:
+	down(empty)						down(full)
+	lock(mutex)						lock(mutex)
+				//Access Buffer
+	unlock(mutex)						unlock(mutex)
+	up(full)						up(empty)

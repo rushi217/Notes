@@ -1,0 +1,121 @@
+Internal Fragmentation = 2 process cannot be allocated in single fixed partition
+External Fragmentation = If contiguous memory is not available process cannot be allocated even if free memory is available
+
+We cannot convert relocatable address to absolute address before runtime as process can be moved around in RAM
+
+
+Memory Management
+	Memory can be byte/word addressable
+	Base register and Limit register to specify the memory bounds
+	Linker and Loader
+	Dynamic linking adds stub, which is later translated to address which is used to access the routine
+	
+	Page Table cannot be swapped out as it contains the info about the pages that have been swapped out
+	PCB also cant be swapped out as it contains pointer to page directory
+	PCB is kept in the beginning of kernel stack of the process
+	
+	Virtual Address :=
+	
+		Translation Look Aside Buffer is a cache for speeding up address translations
+		Since Each translation requires multiple memory accesses
+		TLB miss - TLB does not contain the mapping
+		
+		The average time for an address translation is 
+			Thit*Phit + Tmiss*Pmiss
+		
+		When a page is evicted from memory, Its TLB entry is also evicted
+		
+		a 128-entry, 4-way set-associative TLB would have 32 sets, each containing 4 entries in each set
+		since there are 32 sets, we need 5 bits to select the set
+		Page size is 4kb, so 12 bits for byte offset in each page
+		VPN (Virtual page number) and PPN (physical page number) size = 32-12 = 20 bits
+		So each TLB entry contains 20 - 5 + 2 = 17 bits (2 bits for present, change bit)
+		
+		TLB contains Address Space Identifiers (ASID) to distinguish between translations of different processes
+		
+		Using Page table only required blocks of program are loaded into the RAM.
+		Page table has entries of Page Frame, dirty bit, present bit, r/w, reference.
+		
+		r/w bit gives r/w permissions on pages
+		
+		references bit helps in finding least recently used page for page replacement
+		
+		Dirty bit tells if the block emptied from the RAM needs to written into swap.
+		If the block has not changed the dirty bit is not set and it is not written in the swap.
+		
+		Present bit tells if the block is present in the ram or not.
+		If not present then:
+			A page faults occurs. OS finds out the reason for page fault and loads the block into ram.
+			After that the control is set back to that instruction that caused the page fault.
+			
+		Used in Virtual Memory where entire memory is broken down into page frames of a fixed size.
+		MMU(Memory Management Unit) maps Virtual address to physical address.
+		MMU stores PDPR.
+		OS creates Page Tables and Directory table in the RAM.
+		Addrssing is bytewise.
+		Virtual Address = Directory Entry + Table Entry + Offset.
+		PDPR = Page Directory Pointer Register.
+		DE is offset in the directory table.
+		Directory Table gives the Page Table Pointer.
+		TE is the offset in the Table.
+		DE points to the page table.
+		TE points to the page frame.
+		Physical Address = Page frame + Offset
+		PDPR + DE = PTP
+		PTP + TE = PF
+		eg:-
+		In 32 bit s/m
+		10 bits for DE
+		10 bits for TE
+		12 bits for Offset
+		So a total of 2^10 = 1024 tables
+		1024 entries in each table(4KB/table)
+		2^32 = 4GB of RAM supported.
+		
+		For 64 bit s/m 2 level hierarchy is not suitable as too many page tables
+		Hierarchical paging in general is not suitable due too many accesses to memory for a single translation
+		Hashed Page Tables hash PE+DE into a table that contains translations alongwith a chain for avoiding collisions
+		
+		
+
+	Logical Address :=
+
+		Used in segmentation. Segments can be of any size.
+		Text, Data, Heap, Stack Segment.
+		Segment Descriptor TAble used to map logical address to physical address.
+		1 Registers in the processor:- Pointer to descriptor table.
+		Logical Address = Segment Selector + Offset
+		Segment selector is offset in the descriptor table.
+		Physical Address = Base + Offset(addition/exor)
+		Fragmentation is an issue.
+		
+	x86 s/m:=
+		
+		Use both segmentation and paging.
+		CPU generates Logical Address and Segmentation Unit generates Linear Address for the supplied Logical Address.
+		PGDT = Pointer To Global descriptor table.
+		GDT contains segment Descriptors.
+		Segment Descriptor has three fields
+		Base, Limit, Access Right = Access  policies
+		Linear Address = Base + Offset
+		Linear Address goes through 2 level page translation to give physical address.
+		
+		
+	System calls:-
+		
+		mmap - to allocate new data in address table
+		brk, sbrk - extend the program break which exists just above the data segment
+			brk - set program break to a particular address
+			sbrk - increment bytes by extending prog break
+			--(Contiguous in logical but discrete in physical)--
+		setrlimit - to set resource limits of all kinds eg:- stack size, Max address space, CPU time limit
+		
+		Working Set Size (WSS) - current locality of the process
+			most actively used pages for the process
+			Demand (D) = sum(WSSi) for process i
+			if D <= m no thrashing (m = number of frames in the memory)
+			
+		Based on page fault frequency, we set a lower and upper threshold on the number of frames allocated to a process
+		Degree of multiprogramming v/s CPU utilization graph is a mountain
+		Control thrashing by instructing LTS to not bring more processes into memory
+		Also stop thrashing by instructing MTS to put the thrashing process into SWAP for a while

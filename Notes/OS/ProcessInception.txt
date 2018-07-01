@@ -1,0 +1,56 @@
+1. Fork creates a process:
+	find a process in unused state in the ptable.
+	allocate a copy of the kernel stack
+	assign a PID
+	Page directory and process size is copied.
+	Trapframe is copied(PCB except accumulator)
+	All files opened by parent are accessible by the child.
+	Child runs in the same directory
+	State set to runnable
+	Return PID
+	
+2. In child fork returns zero
+	kernel stack of child process return value is set to zero.
+
+3. Forkin does not load RAM as page table is same.
+
+4.When child changes a page, OS creates a different copy of the page for the child only for that page.
+	Copy On Write(COW)
+	
+5. EXEC:
+	run a program or executable
+	Code and Data section is filled in the Virtual Memory.
+	Add a guard block to detect stack overflow.
+	Fill user stack with:
+		Command line arguments(argv, argc) supplied in exec call.
+		
+	CLONE:
+		Creates a new process just like fork
+		Clone allows child process to share context with the calling process such as memory space, table of file descriptors
+		Instead of copying, the new process points to the data structures of the parent process
+		Used to implement threads
+		passed a function name just like pthread_create
+		
+		
+	
+6. init process is started initially by the kernel.
+
+7. init spawns a child which executes 'sh'(shell). It waits for the child to die
+
+8. Voluntary Termination = exit s/m call.
+
+9. Involuntary Termination = kill signal.
+
+10. In Zombie state, process PCB still remains in the Kernel so that parent can read its exit status.
+
+11. If parent goes before child, zombies live infinitely. Reaper process periodically kill zombies.
+
+12. Orphans are adopted by the init.
+
+13. Daemons are intentional orphans that are created by user process and passed to background.
+
+14. If a child is killed it becomes zombie and remains untill parent claims it.
+
+15. If a parent is killed child is adopted by systemd
+
+16. CWD = Current Working Directory; ELF = Executable Linker Format 

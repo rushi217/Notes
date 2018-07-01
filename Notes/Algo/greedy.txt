@@ -1,0 +1,54 @@
+1. Kirchoff theorem:
+	find the adjacency matrix
+	replace diagonal elements with degree
+	replace 1's with -1
+	keep 0's same
+	find cofactor of any element
+	
+2. Huffman coding:
+	Build minheap
+	extract 2 min elements
+	add their freq
+	insert the addition into the heap
+	build tree bottom up
+	
+3. Fractional Knapsack
+	calculate value/weight ratio
+	sort according to it in descending order
+	fill bag until we run out of most valuable item
+	the fill the remaining with the fraction of next item
+	
+4. Prims
+	keep visited, mincost, parent arrays (in reality a min heap is maintained)
+	visited marks the nodes that have been visited
+	mincost maintains minimum cost to a node
+	parent maintains the parent that has been selected
+	find the minimum edge, use it and update the cost of newly reachable nodes
+	keep on doing this until we have n-1 edges
+	if you visit a node, mark it visited and set its parent
+	
+5. Kruskal
+	union-find to detect cycles and add nodes to the forest
+	sort all edges and add them to the mst only if adding does not create cycle
+	add n-1 edges
+	find gives the parent
+	union adds a node to a forest by setting its parent
+	
+6. Djkstra
+	create a cost matrix for all nodes
+	set all costs to infinity
+	set cost of origin to zero
+	relax all edges outgoing from the node
+	relaxing:
+		if cost of src node + edge weight < cost of dest node and the dest node has not been visited then
+			cost of dest node = cost of src node + edge weight
+			
+7. Negative graphs
+	No shortest paths for graphs with -ve weight cycles
+	Djkstra cannot handle them
+	Bellman-Ford can find them
+	
+8. Bellman-Ford
+	relax all edges n-1 times
+	then relax nth time
+	if there are any changes in the nth time, then graph contains -ve weight cycles

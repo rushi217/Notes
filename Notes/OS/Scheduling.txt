@@ -1,0 +1,55 @@
+Dispatcher (short term scheduler) performs context switching
+
+Long Term Scheduler decides when to create process (selection of processes that should be present in the ready state queue)
+
+Medium term scheduler decides which process to swap out if memory is full
+
+Turn Around Time = Completion Time - Arrival Time (Time for which process stays in the system)
+Waiting Time = Turn Around Time - Burst Time	(Time spent by process waiting)
+
+1. SJF w/o pre-emption, Round Robin(timeslice), FCFS
+
+2. xv6 uses strawman scheduling, a variant of Round Robin.
+
+3. Multi-level feedback queues.
+
+4. Multi processor scheduling :- Global queues, perCPU queues
+
+5. ptable locking in xv6 and linux 2.4 to avoid multiple processors executing same process.
+
+6. Above technique is called Serializing access to global queue
+
+7. Hybrid Aproach :-
+	Each CPU has local queue alongwith a global queue
+	global queue maintains load balancing
+	local queue removes need for ptable locking
+	Used in Linux 2.6
+
+8. O(n) scheduler:
+	looks into queue of processes
+	n = number of processes
+	not scalable
+
+9. O(1) Scheduler:
+	Processes divided into 2 types- Real time(continual input and outputp of data), Normal(Interactive, Batch)
+	Normal = each priority has a queue
+	find highest prio q with atleast 1 process. Since limited number of queues it is O(1) scheduler(uses bitmap).
+	
+10. CFS Scheduler(Completely Fair Scheduler):
+	Current Scheduler in Linux based on RSDL
+	In Ideal Fair Scheduling Each process gets equal time in each epoch.
+	Virtual Runtimes : 
+		Each process has virtual runtime(vruntime) in PCB
+		If a process executes for 't' ms, then vruntime += t
+	At timer interrupt(Round Robin time slice) select process with minimum vruntime
+	CFS uses Red-Black tree data structure 
+	Nodes on left are processes with low vruntime compared with those on right
+	min_vruntime variable points to the leftmost node in the tree.
+	Dynamic time slices is interrupted based on vruntime.
+	At timer interrupt, executing process reinserted into tree and the next leftmost process is picked
+	Same process may be picked again
+	Total Time Taken = O(log n)
+	RBT is used as it is self balancing and all operations take O(log n)
+	vruntime += t*(weight based on nice values); This is how priority is implemented
+	I/O processes need high priority; This is achieved automatically as I/O processes' vruntime increases very slowly
+	New process put at leftmost node.

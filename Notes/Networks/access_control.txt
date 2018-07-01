@@ -1,0 +1,29 @@
+Collision in broadcast channel due to multiple senders
+Techniques:-
+	TDM (Time Division Multiplexing)
+		cycle period = Tt + Tp
+		useful period = Tt
+		efficiency = Tt / (Tt + Tp)
+	
+	Polling
+		Assign TDM slot after polling only if sender wants to send
+		cycle period = Tpoll + Tt + Tp
+		
+	CSMA/CD
+		Carrier Sensing Multiple Access / Collision Detection
+		Before sending the data, sender senses the carrier
+		If carrier is free you can send the data
+		No ACK in LANs so collision cannot be detected easily
+		Senders cannot tell if the collision signal is due to their packets
+		So we keep frame length long enough such that, if there is a collision during Tt sender knows that it is due its packet
+		If collision happens at one of the ends the sender detects collision after 2*Tp
+		so Tt > 2*Tp
+			L/BW > 2/Tp
+			L > 2*Tp*BW So length of the packet must be greater than 2*Tp*BW
+		efficiency = Tt / (c*2*Tp + Tt + Tp)	c = number of collisions
+		
+		Probality of success = Prob that only one station send
+							= nC1 p * (1-p)^(n-1)
+		Problem is that after detection both senders might start transmission at the same time
+		This leads to collision again
+		So we use backoff algorithm (01 or 10) using Tslot

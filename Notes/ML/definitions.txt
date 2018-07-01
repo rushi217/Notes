@@ -1,0 +1,23 @@
+Machine learning (ML) is a category of algorithm that allows software applications to become more accurate in predicting outcomes without being explicitly programmed.
+
+The program looks for patterns and updates weights (parameters) accordingly so that it can predict the output for future inputs
+
+Deep learning is a special kind of mchine learning which enables us to compute more abstracted features in terms of less abstracted features
+
+If we solve this as a typical machine learning problem, we will define features such as if the animal has whiskers or not, if the animal has ears & if yes, then if they are pointed. In short, we will define the facial features and let the system identify which features are more important in classifying a particular animal.
+
+Now, deep learning takes this one step ahead. Deep learning automatically finds out the features which are important for classification, where in Machine Learning we had to manually give the features
+
+Handcrafted machine learning algorithms perform better on smaller data
+
+In Machine learning, most of the applied features need to be identified by an expert and then hand-coded as per the domain and data type.
+
+Deep learning algorithms try to learn high-level features from data. Therefore, deep learning reduces the task of developing new feature extractor for every problem. 
+
+Collaborative filtering for Recommendation systems
+	User-User collaborative filtering
+		This algorithm first finds the similarity score between users. Based on this similarity score, it then picks out the most similar users and recommends products which these similar users have liked or bought previously.
+		
+	We use cosine similarity to find similarity between 2 users or items
+	Then we calculate probablity of recommending an item to a user using formula:-
+		dot product of rating matrix with similarity matrix/summation of similarity matrix for the user
