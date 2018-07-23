@@ -1,0 +1,45 @@
+Open Systems Interconnection
+
+Physical layer:-
+	Information in form of bits
+	Provides synchronization using clock
+	limits transmission rate
+	Defines network topology
+	defines transmission mode (simplex, duplex)
+	Encoding and decoding functions that transform bits to signals
+	Techniques:-
+		NRZ - 1 by +ve voltage, 0 by -ve voltage
+		RZ - 0 by 0 voltage	
+		Both techniques are not self clocking, so they require clocking
+		Now this requires 2 channels
+		Manchester encoding - exor of data and clock signals
+	
+Datalink layer:-
+	Node to node delivery of frame
+	divided into 2 sublayers:-
+		Logical link control - frame synchronization, flow control, error checking
+		Media Access control - Addressing mechanism and channel access control
+		
+Network layer:-
+	Transmission of packets from one host to another
+	Routing - selecting shortest path to transmit packet
+	Unique logical addressing
+	
+Transport layer:-
+	Appplication to application delivery of segments
+	Flow and error control
+	Accepts message from session layer and divides it into segments
+	Service point addressing
+	Connection oriented and connection less service
+	
+Session layer:-
+	Establishment of connection (of processes), maintenance of session, authentication
+	Allows process to add checkpoints into data
+	Dialog controller
+	
+Presentation layer:-
+	called translation layer as it converts data into required format(eg:- ASCII to EBCDIC)
+	Encryption/Decryption
+	Compression
+	
+Application layer

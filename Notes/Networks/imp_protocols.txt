@@ -1,0 +1,118 @@
+ARP:-
+	Address Resolution Protocol
+	Used to discover MAC address using IP address
+	Request - Response protocol
+	Link layer packet structure:-
+		HTYPE - 1 for ethernet
+		PTYPE - ARP or IPv4
+		HLEN - Hardware address length (6 for ethernet)
+		PLEN - Upper protocol address length (4 for IPv4)
+		Operation - 1 for request, 2 for reply
+		Sender Hardware Address - used to populate mac table and arp table of reciever
+		Sender Protocol Address
+		Target Hardware Address - During ARP request this is set to broadcast mac address
+		Target Protocol Address
+	Host system tries to find mac address of the next hop in the table
+	If it finds, it gives the address back to caller
+	If it does not then the ARP is carried out
+	
+IP:-
+	Internet Protocol
+	Deliver packets from source to destination hosts using only IP addresses
+	Unreliable, connectionless protocol
+	Best effort delivery - does not guarantee delivery
+	Packet Switching - data is divided into packets and delivered across network
+		Each packet can take different route
+	Circuit Switching - dedicated communication is established between 2 nodes
+	IP Packet Structure:-
+		Version - 4 or 6
+		Length - Length of IP header (5 or 6)
+		Total length - Header + data
+		Identifier, flags, fragmentation offset - used for fragmentation
+		TTL - decremented by every router so that packet does not live infinitely
+		Protocol - upper layer protocol
+		Header Checksum - check for errrors
+		Source and Destination IP address
+		Options and padding
+	IP fragmentation:-
+		breaks packets into smaller fragments so that the packets can pass through a link with small MTU (Maximum Transmission Unit)
+		3 bit flags - Bit 0 reserved - must be zero
+					  Bit 1 Dont Fragment - 0 for may fragment if needed, 1 for no fragmentation
+					  	if packet cannot be delivered w/o fragmentation, it is discarded
+					  Bit 2 More Fragments - 0 for indicating last fragment, 1 if more fragments are yet to come
+		Identification field - To identify fragments of the same packet
+		Fragmentation offset - indicates position of fragment in the orignal packet
+		Sender host sets a unique Identification field for a source dextination protocol
+		Last fragment contains More Fragments bit equal to orignal packet (This allows multi level fragmentation)
+		
+ICMP:-
+	Internet Control Message Protocol
+	Used by routers to send error messages and operational information
+	It uses IP for messaging
+	ICMP header starts after IP header
+	Header format:-
+		Type - Control message identifier
+		code - additional info for control message
+	used for ping, destination unreachable, redirection
+
+UDP:-
+	User Datagram Protocol
+	Unreliable connectionless protocol
+	Suitable for simple query response applications like DNS
+	No retransmission delay
+	Header Format:-
+		Source/Destination port number - usually a well known port number if server
+		Length - header + data (4 to 65535)
+		Checksum - error checking
+	Pseudo Header - 
+		UDP is an end to end protocol, the checksum is end to end not hop by hop
+		Source/Destination IP address are useful to TCP as well as IP
+		So we cannot let IP change SA/DA
+		The plan was to encrypt the UDP header (along with pseudo header) and leave SA/DA plain
+		This protected from MITM as the middle guy changing SA will invalidate the checksum
+		
+TCP:-
+	Reliable, Error checked, connection oriented protocol
+	Reliability using Acknowledgements and Retransmission
+	Congestion Control using various protocols
+	Header Format:-
+		source/destination port
+		Sequence Number - If SYN flag is set, then this is the initial sequence number
+			Else it is the accumulated sequence number
+		ACK number - If ACK flag is set then this is the next sequence number the reciever is expecting
+			First ACKs acknowledges each others Initial sequence numbers
+		Data offset - size of tcp header in words (5 w/o options)
+		Flags:-
+			NS - Electronic Communication Network (ECN) nonce concealment protection
+			CWR - Congestion Window Reduced, set by sender to indicate that it recieved a segment with ECE flag set
+			ECE - ECN Echo
+				If SYN is 1 - TCP peer is ECN capable
+				SYN is 0 - indicates that segment experienced congestion (congestion indication)
+			URG - indicates that urgent field is significant
+			ACK - ACK number field is significant
+			PSH - push buffered data to application
+			RST - reset the connection
+			SYN - synchronize sequence numbers
+			FIN - last packet from sender
+		Window size - size of recieve window
+		Checksum
+		Urgent pointer - is an offset to sequence number, which indicates the last urgent data byte
+		Options - MSS, Window scaling, SACK permit, Timestamp
+		
+DNS:-
+	Used to translate names into IP address
+	If the translation does not exists in local cache the resolving name server goes to root server
+	At the top exists the root server
+	Root server gives the address of the TLD (Top Level Domain) name servers
+	TLD gives address of the Authoritative name servers using Domain's registrar
+	When a Domain is purchased, it is registered in the registrar
+	ANS gives the ip address of the required website
+	Records:-
+		A record - Point Domain Name (FQDN) to IP address
+		CNAME - Canonical name
+			Single IP can have 2 different servers running on 2 different ports with different names
+			When we change the IP address of the A record the change is reflected in each CNAME records
+		MX record - Mail Exchange record
+			Specifies Mail server that will recieves mail
+			All mails to the example.com are directed to mail.example.com
+	Round Robin Load Balancing - A records with different IP address are used in round robin fashion
