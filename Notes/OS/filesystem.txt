@@ -22,12 +22,10 @@ Disk space is allocated in blocks which might lead to internal fragmentation (so
 Use indexing (dense or sparse) to keep track of file blocks
 
 Inode:-
-	Inode is the entire structure
+	Inode structure exists in all file system. But the block address allocation methods vary.
+	FAT32 - linked list of blocks
 	Directories are files that contain filename string and inode number pairs
 	Superblock of the system contains starting logical address (block number) of the file mapped to an inode number
-	Inode number of '.' is the inode number of the directory
-	Inode number of '..' is the inode number of the parent directory
-	That is why 'cd .' returns you to same folder
 	When we delete file we set its inode number to zero so we cannot access a file but it is still there
 	When we perform deletion and creation of files repeatedly, inode numbers are not allocated contiguously
 	This is why search time increases and system performance deteriorates gradually
@@ -66,6 +64,47 @@ Inode:-
 				use 13th address
 				triple indirect block address
 				File size is 16gb
+				
+Directory:
+	Special file that contains directory entries (structure containing filename and inode number and all info obtained in ls)
+	Max number of files in a directory = max possible file size (since directory itself is a file) / size of directory entry
+				
+Creation of a file:
+	Allocate an inode(first available)
+	Mark flags(type, permission)
+	Update size, dates
+	Add entry for file in parent directory
+	Update inode of Parent directory
+
+Editing a file:
+	Allocate a block
+	Zero out the block
+	Write to the block
+	update the file's inode
+	
+Remove a file:
+	Zero out the directory entry in parents's data block
+	update the parent dir inode
+	mark file's inode to free
+	update free block bitmap to mark file's data block free
+	
+Syncronisation:
+	OS reads the data blocks from disk to buffer cache
+	Assume multiple threads want to create a file:
+		We will need 4 locks (busy bit locks per buffer) one by one:
+			cache containing block free inode numbers
+			cache containing block of inode of the new file
+			cache containing block of the directory entry of the file
+			cache containing block of inode of the parent directory
+		Acquire Global cache lock to set the busy bit locks
+		Take inode locks before block locks to maintain consistency
+				
+Disaster Recovery:
+	Journaling (Atomic transactions using special data structures)
+	
+Efficiency:
+	Disk Defragmentor for aligning blocks of same file in proximity
+	Logging
 
 System Calls :-
 	open(path, mode) is used to add file to open files table using file descriptor as an index
