@@ -100,11 +100,43 @@ Syncronisation:
 		Take inode locks before block locks to maintain consistency
 				
 Disaster Recovery:
-	Journaling (Atomic transactions using special data structures)
-	
+	Ordering the operations (limit the type of inconsistencies)
+		This can cause cycle of dependencies
+			mv a/file b/file
+			mv b/foo a/foo
+			dependency cycle on which block to flush first
+		If dependency cycle detected, flush blocks then move to next operation
+	Logging (atomic w.r.t power failure)
+		Maintain a log file
+		Log each write before any flushing
+		Append commit record to log
+		Then Asynchronously flush writes
+		If failure occurs during asyncronous writing
+			Start applying the Log from the beginning again during recovery (write ahead)
+		Problems:
+			2x writes
+			for small operation, large log overhead
+			eager write to the log
+			Common log across filesystem is bad for multiple users
+		EXT3 filesystem:
+			One transaction contains writes for any number of processes during a time interval
+			This alone amortizes all problems
+			Multiple writes to the same block gets absorbed by the cache
+			Fixed size log with wraparound
+			Initial section of log (superblock) contains metadata (file offset for start of transaction, transaction sequence no.)
+			Log contains:
+				descriptor block(block no., transaction sequence no., magic no.(verify valid block from garbage))
+				data block(data)
+				commit block(trans seq no., magic no.)
+			Recovery:
+				Scan log superblock to get offset, seq#
+				Scan forward till some other seq#/magic# encountered
+				Flush
+			Only one transaction modifies buffers at a time (others wait)
+			If somebody wants to modify buffer while it is being flushed, copy on write(versioning)
+			
 Efficiency:
 	Disk Defragmentor for aligning blocks of same file in proximity
-	Logging
 
 System Calls :-
 	open(path, mode) is used to add file to open files table using file descriptor as an index
