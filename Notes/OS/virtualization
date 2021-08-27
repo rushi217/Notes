@@ -8,7 +8,7 @@ Why is it used:
 		Testing/using different types of software
 		Avoid need for different hardware for different OSes
 	Security Testing:
-    	
+		Isolate and contain malicious software
     
 Type 1:
 	run directly on bare metal(hardware)
@@ -20,3 +20,25 @@ Type 2:
 	runs like an application
 	commonly for desktops
   
+Modern CPU provide special hardware and instruction for virtualization
+	Intel VT-x
+Hypervisor does 3 hardware functions:
+	Virtualize memory management
+		guest virtual memory mapped to physical memory
+		Modern CPU provide extended Memory Management Unit for hypervisor
+		Hypervisor sets up initial memory layout
+			bootloader
+			Hardware devices
+			interrupt vector table
+	CPU instructions:
+		Intercepts and Handles privileged instructions
+			safe instructions are allowed
+			cpu generates trap (hardware exception)  when unsafe instructions are encountered (VM enter)
+			Hypervisor intercepts this trap and handles it and returns control to guest OS (VM exit)
+			
+	Manage I/O:
+		Hypervisor intercepts memory mapped I/O instructions and virtualizes interrupt controller
+		CPU generate trap when I/O instruption detected
+		Trap intercepted by hypervisor (VM enter)
+		hypervisor interacts with host OS then returns to guest OS(VM exit)
+	
