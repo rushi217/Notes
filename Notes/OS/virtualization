@@ -34,8 +34,7 @@ Hypervisor does 3 hardware functions:
 		Intercepts and Handles privileged instructions
 			safe instructions are allowed
 			cpu generates trap (hardware exception)  when unsafe instructions are encountered (VM enter)
-			Hypervisor intercepts this trap and handles it and returns control to guest OS (VM exit)
-			
+			Hypervisor intercepts this trap and handles it and returns control to guest OS (VM exit)	
 	Manage I/O:
 		Hypervisor intercepts memory mapped I/O instructions and virtualizes interrupt controller
 		CPU generate trap when I/O instruption detected
