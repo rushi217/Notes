@@ -6,6 +6,8 @@ Why is it used:
     VMs are easy to move around on different machines
   Desktop Virtualization:
     Testing/using different types of software
+    Avoid need for different hardware for different OSes
+  Security Testing:
     
     
 Type 1:
