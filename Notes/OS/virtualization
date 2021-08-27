@@ -1,0 +1,20 @@
+Creating software based versions of resources
+Why is it used:
+  Server consolidation:
+    physical servers are underutilized, so waste energy
+    instead run many VMs on single server to improve utilisation
+    VMs are easy to move around on different machines
+  Desktop Virtualization:
+    Testing/using different types of software
+    
+    
+Type 1:
+  run directly on bare metal(hardware)
+  like native OS
+  does not provide generic syscalls
+  Vmware esxi
+Type 2:
+  Runs within OS
+  runs like an application
+  commonly for desktops
+  
