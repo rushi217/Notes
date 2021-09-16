@@ -39,6 +39,19 @@ Static
 		Other linked object files are unable to access it (hidden)
 	When used with local variables - persistence over multiple function calls
 		visible only within that function (global variable like entity for function)
+		
+auto
+	Automatic type deduction
+	Done at compilation time
+	Affects compilation time but not run-time
+	
+register
+	compiler tries to store this in a register
+	used for very frequently accessed variables
+	
+mutable:
+	allows to modify members of a const object
+	members that are declared as mutable can be modified, while trying to modify other members will give compilation error
 	
 Inline function
 	inline void sum(int a, int b){
