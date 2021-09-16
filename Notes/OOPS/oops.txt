@@ -1,3 +1,17 @@
+Friend class:
+class A{
+  friend class B;
+};
+Here B is a friend of class A
+so B can access private members of A
+This friendship is not mutual
+
+Friend function:
+class A{
+  friend int B::func();   //Only func() in class B can access A's private members
+  friend int func2();     //Global friend
+}
+
 Assignment operator is overloaded in classes when we assign a class object to other class object
 Student s1 = s2 (Here student is a class)
 Above line calls copy constructor which copies (deep) all variables of one object to other object
